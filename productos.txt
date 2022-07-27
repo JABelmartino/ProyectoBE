@@ -1,0 +1,42 @@
+[
+  {
+    "obj": {
+      "title": "Gorra Roja",
+      "price": 1200,
+      "thumbnail": "http2.mlstatic.com/D_NQ_NP_696393-MLA48571693690_122021-W.jpg"
+    },
+    "id": 1
+  },
+  {
+    "obj": {
+      "title": "Gorra Azul",
+      "price": 1400,
+      "thumbnail": "https://http2.mlstatic.com/D_NQ_NP_785389-MLA46729814076_072021-O.webp"
+    },
+    "id": 2
+  },
+  {
+    "obj": {
+      "title": "Gorra Gris",
+      "price": 1300,
+      "thumbnail": "https://http2.mlstatic.com/D_NQ_NP_788544-MLA49808447673_042022-W.jpg"
+    },
+    "id": 3
+  },
+  {
+    "obj": {
+      "title": "Gorra Negra",
+      "price": 1800,
+      "thumbnail": "https://http2.mlstatic.com/D_NQ_NP_946286-MLA49448249941_032022-W.jpg"
+    },
+    "id": 4
+  },
+  {
+    "obj": {
+      "title": "Gorra Verde",
+      "price": 1000,
+      "thumbnail": "https://http2.mlstatic.com/D_NQ_NP_848691-MLA48579418881_122021-W.jpg"
+    },
+    "id": 5
+  }
+]
