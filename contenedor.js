@@ -19,15 +19,37 @@ class Contenedor{
             console.log(error)
         }
     }
+    async postProducto(producto){
+        try{
+           
+            let dataArchivo  = await fs.promises.readFile(this.ruta, 'utf-8')
+            let dataArchivoParse = JSON.parse(dataArchivo)
+            producto.id = dataArchivoParse.length+1
+            if(dataArchivoParse.length){
+            const obj = dataArchivoParse.push(producto)    
+            await fs.promises.writeFile(this.ruta, JSON.stringify(dataArchivoParse, null, 1))
+            return producto   
+            }else{
+            await fs.promises.writeFile(this.ruta, JSON.stringify(dataArchivoParse, null, 1))
+            }
+
+            console.log(`El archivo tiene el id: ${producto.id}`)
+        }catch(error){
+            console.log(error)
+        }
+      
+    } 
+  
     async updateById(obj, id){
         try{
             console.log(obj)
             let dataArchivo = await fs.promises.readFile(this.ruta, 'utf-8')
             let dataArchivoParse = JSON.parse(dataArchivo)
-            const objindex = dataArchivoParse.find(prod => prod.id == id)
+            const objindex = dataArchivoParse.findIndex(prod => prod.id == obj.id)
             console.log(objindex)
-            if(objindex){
-                await fs.promises.writeFile(this.ruta,JSON.stringify(obj, null, 1))  
+            if(objindex !== -1){
+                dataArchivoParse[objindex] = obj
+                await fs.promises.writeFile(this.ruta,JSON.stringify(dataArchivoParse, null, 1))
             }else{
                 return {error: 'No hay productos con ese Id'}
             }    
@@ -58,10 +80,12 @@ class Contenedor{
             let dataArchivo = await fs.promises.readFile(this.ruta, 'utf-8')
             console.log(id)
             let dataArchivoParse = JSON.parse(dataArchivo)
-            const objindex = dataArchivoParse.filter(prod => prod.id != id)
+            const objindex = dataArchivoParse.findIndex(prod => prod.id == id)
             console.log(objindex)
-            if(objindex){
-                await fs.promises.writeFile(this.ruta,JSON.stringify(objindex))
+            if(objindex != -1){
+                const borradoFinal = dataArchivoParse.splice(objindex,1)
+                await fs.promises.writeFile(this.ruta,JSON.stringify(dataArchivoParse))
+                return {'id':id}
             }else{
                 return {error: 'No hay productos con ese ID'}
             }    

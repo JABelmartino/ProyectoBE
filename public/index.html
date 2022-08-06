@@ -7,12 +7,11 @@
     <title>Document</title>
 </head>
 <body>
-    
-    <form action="/action_page.php">
-        <label for="title">Title</label><br>
-        <input type="text" id="title" name="title" value="John"><br>
-        <label for="lname">Last name:</label><br>
-        <input type="text" id="lname" name="lname" value="Doe"><br><br>
+    <h1>Formulario para POST</h1>
+    <form method="POST" action="/api/productos">
+        <input type="text" name="title" placeholder="Nombre"><br>
+        <input type="number" name="price" placeholder="Precio"><br>
+        <input type="text" name="thumbnail" placeholder="URL de Imagen"><br><br>
         <input type="submit" value="Submit">
       </form>
 

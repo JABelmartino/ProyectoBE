@@ -19,7 +19,7 @@ routerProductos.get('/', async (req, res) => {
         productos
     })
 })
-/*
+
 routerProductos.get('/:id', async (req, res) => {
     const {id} = req.params
     const elegido = await contenedor.getId(id)
@@ -29,20 +29,22 @@ routerProductos.get('/:id', async (req, res) => {
         return {error:'No existe'}
     }
  })
-*/
-routerProductos.post('/', (req, res) => {
-    const {title,price} = req.body
-    const productos = arrayProductos.push({title,price})
+
+routerProductos.post('/', async (req, res) => {
+    const {id} = req.params
+    const {title,price,thumbnail} = req.body
+    const producto = {id,title,price,thumbnail}
+    const agregado = await contenedor.postProducto(producto)
     res.json({
-        productos:arrayProductos
+        agregado
     })
 })
 
 routerProductos.put('/:id', (req, res) => {
     const {id} = req.params
     const {title,price,thumbnail} = req.body
-    const obj = {title,price,thumbnail}
-    const actualizado = contenedor.updateById(obj,id)
+    const obj = {id,title,price,thumbnail}
+    const actualizado = contenedor.updateById(obj)
     res.json({
         actualizado
     })
@@ -50,10 +52,9 @@ routerProductos.put('/:id', (req, res) => {
 
 routerProductos.delete('/:id',async (req, res) => {
     const {id} = req.params
-    const borrado = await contenedor.deleteById(id)
-        res.json({
-            mensaje: 'borrado existosamente',
-            id
+    const borrado = await contenedor.deleteById(id)   
+    res.json({
+           borrado
         })
 })
 
