@@ -1,0 +1,8 @@
+{{#if listExist}}
+<ul>
+    {{#each list}}
+    <li>{{title}} {{price}} <img src={{thumbnail}}></li>
+    {{/each}}
+</ul>
+{{/if}}
+<input type="button" value="Volver al Formulario" onclick="location.href='/api/productos'">
