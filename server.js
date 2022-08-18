@@ -2,22 +2,15 @@ const express = require('express')
 const { Router } = express
 const Contenedor = require("./contenedor");
 const contenedor = new Contenedor('./productos.txt')
-const handlebars = require('express-handlebars');
+const contenedor2 = new Contenedor('./mensajes.txt')
+const {Server: HTTPServer} = require('http')
+const {Server: IOServer} = require('socket.io')
 
 
 const app = express()
 const routerProductos = Router()
-
-//app.engine(
- //   'hbs',
- //   handlebars.engine({
- //       extname: '.hbs',
-  //      defaultLayout: 'index.hbs',  
-  //      layoutsDir: __dirname + '/views/layouts',
-     //   partialsDir: __dirname + '/views/partials'
-  //  })
- //   )
-
+const httpServer = new HTTPServer(app)
+const io = new IOServer(httpServer)
 
 app.set('views','./views')
 app.set('view engine', 'ejs')
@@ -26,66 +19,50 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static('public'));
 
-
+httpServer.listen(8080, () =>{
+    console.log(httpServer.address().port)
+})
+httpServer.on('error', err => console.log(err))
 
 const arrayProductos = []
 ///-Productos-///
+
 routerProductos.get('/', async (req, res) => {
     const productos = await contenedor.getProductos()
     res.render('index', {formulario: productos}) 
 })
 
-routerProductos.get('/productos', async (req, res) => {
-    const productos = await contenedor.getProductos()
-    res.render('list',{ listExist:true, list:productos}) 
+io.on('connection', async (socket) =>{
+    const productos =  await contenedor.getProductos()
+    socket.emit('mensaje-servidor', {productos} )
+    socket.on('mensaje-nuevo', (productoNuevo) =>{
+        productos.push(productoNuevo)
+        contenedor.postProducto(productoNuevo)
+      const listNueva = {
+        mensaje: 'ok',   
+        productos
+      }
+      io.sockets.emit('mensaje-servidor', listNueva)
+    }) 
 })
 
-routerProductos.get('/:id', async (req, res) => {
-    const {id} = req.params
-    const elegido = await contenedor.getId(id)
-    if(elegido){
-     res.json({elegido})
-    }else{
-        return {error:'No existe'}
-    }
- })
-
-routerProductos.post('/', async (req, res) => {
-    const {id} = req.params
-    const {title,price,thumbnail} = req.body
-    const producto = {id,title,price,thumbnail}
-    const agregado = await contenedor.postProducto(producto)
-    res.render('index',{ listExist:true, list:contenedor}) 
+io.on('connection', async (socket) =>{
+    const mensajes =  await contenedor.getMensajes()
+    socket.emit('mensaje-servidor2', {mensajes})
+    socket.on('mensaje-nuevo2', (mensajeNuevo) =>{
+        mensajes.push(mensajeNuevo)
+        contenedor.postMensaje(mensajeNuevo)
+      const listMensaje = {
+        mensaje: 'ok',   
+        mensajes
+      }
+      io.sockets.emit('mensaje-servidor2', listMensaje)
+    }) 
 })
-
-routerProductos.put('/:id', (req, res) => {
-    const {id} = req.params
-    const {title,price,thumbnail} = req.body
-    const obj = {id,title,price,thumbnail}
-    const actualizado = contenedor.updateById(obj)
-    res.json({
-        actualizado
-    })
-})
-
-routerProductos.delete('/:id',async (req, res) => {
-    const {id} = req.params
-    const borrado = await contenedor.deleteById(id)   
-    res.json({
-           borrado
-        })
-})
-
-
-
 app.use('/', routerProductos)
 
 
 
 
 
-const server = app.listen(8080, () =>{
-    console.log(server.address().port)
-})
 
-server.on('error', err => console.log(err))

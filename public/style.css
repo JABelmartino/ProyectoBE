@@ -1,3 +1,6 @@
+*{
+margin-left:25px
+}
 .listmain{
     background-color: rgb(255, 255, 255);
     max-width: 350px;
@@ -24,4 +27,20 @@ h2{
     padding-bottom: 20px;
     box-shadow: 4;
 }
-
+.email{
+    font-weight: bold;
+    color: blue;
+}
+.mensaje{
+    color: darkgreen;
+    font-style: italic;
+}
+.time{
+color: brown;
+}
+.mensajelist{
+    display: flex;
+}
+.chatclass{
+    margin-left: 50px;
+}

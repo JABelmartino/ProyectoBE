@@ -1,5 +1,6 @@
 const fs = require('fs');
 
+
 class Contenedor{
     constructor(ruta){
         this.ruta = ruta
@@ -19,27 +20,59 @@ class Contenedor{
             console.log(error)
         }
     }
-    async postProducto(producto){
+
+    async getMensajes(){
         try{
-           
-            let dataArchivo  = await fs.promises.readFile(this.ruta, 'utf-8')
+            let dataArchivo = await fs.promises.readFile('C:\\Users\\Julian\\Documents\\GitHub\\ProyectoBE\\mensajes.txt', 'utf-8')
             let dataArchivoParse = JSON.parse(dataArchivo)
-            producto.id = dataArchivoParse.length+1
-            if(dataArchivoParse.length){
-            const obj = dataArchivoParse.push(producto)    
-            await fs.promises.writeFile(this.ruta, JSON.stringify(dataArchivoParse, null, 1))
-            return producto   
+            let mensaje = dataArchivoParse
+            if(mensaje){
+                return mensaje               
             }else{
-            await fs.promises.writeFile(this.ruta, JSON.stringify(dataArchivoParse, null, 1))
+                console.log('No se encontro')
             }
 
-            console.log(`El archivo tiene el id: ${producto.id}`)
+        }catch(error){
+            console.log(error)
+        }
+    }
+
+
+    async postMensaje(mensajeNuevo){
+        try{
+            let dataArchivo  = await fs.promises.readFile('C:\\Users\\Julian\\Documents\\GitHub\\ProyectoBE\\mensajes.txt', 'utf-8')
+            let dataArchivoParse = JSON.parse(dataArchivo)
+            if(dataArchivoParse.length){
+            const obj = dataArchivoParse.push(mensajeNuevo)    
+            await fs.promises.writeFile('C:\\Users\\Julian\\Documents\\GitHub\\ProyectoBE\\mensajes.txt', JSON.stringify(dataArchivoParse, null, 1))
+            return mensajeNuevo   
+            }else{
+            await fs.promises.writeFile('C:\\Users\\Julian\\Documents\\GitHub\\ProyectoBE\\mensajes.txt', JSON.stringify(dataArchivoParse, null, 1))
+            }
         }catch(error){
             console.log(error)
         }
       
     } 
   
+    async postProducto(productoNuevo){
+        try{
+            let dataArchivo  = await fs.promises.readFile(this.ruta, 'utf-8')
+            let dataArchivoParse = JSON.parse(dataArchivo)
+            productoNuevo.id = dataArchivoParse.length+1
+            if(dataArchivoParse.length){
+            const obj = dataArchivoParse.push(productoNuevo)    
+            await fs.promises.writeFile(this.ruta, JSON.stringify(dataArchivoParse, null, 1))
+            return productoNuevo   
+            }else{
+            await fs.promises.writeFile(this.ruta, JSON.stringify(dataArchivoParse, null, 1))
+            }
+        }catch(error){
+            console.log(error)
+        }
+      
+    } 
+
     async updateById(obj, id){
         try{
             console.log(obj)
