@@ -23,7 +23,7 @@ class Contenedor{
 
     async getMensajes(){
         try{
-            let dataArchivo = await fs.promises.readFile('C:\\Users\\Julian\\Documents\\GitHub\\ProyectoBE\\mensajes.txt', 'utf-8')
+            let dataArchivo = await fs.promises.readFile((__dirname, 'mensajes.txt'), 'utf-8')
             let dataArchivoParse = JSON.parse(dataArchivo)
             let mensaje = dataArchivoParse
             if(mensaje){
@@ -40,14 +40,14 @@ class Contenedor{
 
     async postMensaje(mensajeNuevo){
         try{
-            let dataArchivo  = await fs.promises.readFile('C:\\Users\\Julian\\Documents\\GitHub\\ProyectoBE\\mensajes.txt', 'utf-8')
+            let dataArchivo  = await fs.promises.readFile((__dirname, 'mensajes.txt'), 'utf-8')
             let dataArchivoParse = JSON.parse(dataArchivo)
             if(dataArchivoParse.length){
             const obj = dataArchivoParse.push(mensajeNuevo)    
-            await fs.promises.writeFile('C:\\Users\\Julian\\Documents\\GitHub\\ProyectoBE\\mensajes.txt', JSON.stringify(dataArchivoParse, null, 1))
+            await fs.promises.writeFile((__dirname, 'mensajes.txt'), JSON.stringify(dataArchivoParse, null, 1))
             return mensajeNuevo   
             }else{
-            await fs.promises.writeFile('C:\\Users\\Julian\\Documents\\GitHub\\ProyectoBE\\mensajes.txt', JSON.stringify(dataArchivoParse, null, 1))
+            await fs.promises.writeFile((__dirname, 'mensajes.txt'), JSON.stringify(dataArchivoParse, null, 1))
             }
         }catch(error){
             console.log(error)
